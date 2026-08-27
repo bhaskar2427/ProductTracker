@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Product Tracker Pro</title>
+    <title>Product Tracker Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* --- DARK MODE & THEME VARIABLES (ORIGINAL) --- */
@@ -156,18 +156,84 @@
         .primary-btn { background-color: var(--button-bg); color: white; padding: 14px; border: none; border-radius: 10px; width: 100%; font-size: 1em; font-weight: bold; }
         .primary-btn:hover { background-color: var(--button-hover-bg); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
 
-        /* --- SEARCHABLE PICKER --- */
+        /* --- ENHANCED SEARCHABLE PICKER IN SALES --- */
         .picker-container { position: relative; }
         .picker-results { 
-            position: absolute; width: 100%; max-height: 200px; overflow-y: auto; 
-            background: var(--card-bg); border: 1px solid var(--border-color); 
-            border-radius: 8px; z-index: 3000; display: none; margin-top: 5px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: absolute; width: 100%; max-height: 280px; overflow-y: auto; 
+            background: var(--card-bg); border: 1.5px solid var(--primary-color); 
+            border-radius: 10px; z-index: 3000; display: none; margin-top: 5px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
         }
-        .picker-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid var(--border-color); font-size: 0.9em; }
-        .picker-item:hover { background: var(--header-hover); color: var(--primary-color); }
+        .picker-item { 
+            display: flex; align-items: center; gap: 12px; padding: 10px 12px; 
+            cursor: pointer; border-bottom: 1px solid var(--border-color); 
+            transition: background 0.15s ease;
+        }
+        .picker-item:last-child { border-bottom: none; }
+        .picker-item:hover { background: var(--header-hover); }
+        
+        .picker-item-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+            background: rgba(0,0,0,0.05);
+        }
+        .picker-item-placeholder {
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
+            background: rgba(128,128,128,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        .picker-item-info { flex-grow: 1; min-width: 0; }
+        .picker-item-title { font-weight: bold; font-size: 0.95em; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .picker-item-meta { font-size: 0.78em; color: var(--secondary-text); margin-top: 3px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
-        /* --- PRODUCT LIST (RESTORED ORIGINAL) --- */
+        /* Active Selected Product Card in Sales */
+        .selected-product-card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            position: relative;
+        }
+        .selected-product-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .selected-clear-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #db4437;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- PRODUCT LIST & GRID VIEW MODES --- */
         .scroll-container {
             max-height: 60vh;
             overflow-y: auto;
@@ -179,8 +245,40 @@
         }
 
         #productList, #salesList { list-style: none; padding: 0; margin: 0; }
+        
+        .view-toggle-container {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .view-btn {
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .view-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
         .product-item { background-color: var(--card-bg); border: 1px solid var(--border-color); margin-bottom: 12px; border-radius: 8px; overflow: hidden; transition: all 0.2s ease; }
         
+        .product-thumb-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
         .product-header { display: flex; align-items: center; padding: 12px; cursor: pointer; user-select: none; }
         .checkbox-container { padding-right: 12px; display: flex; align-items: center; }
         .item-checkbox { transform: scale(1.2); cursor: pointer; }
@@ -194,6 +292,77 @@
 
         .product-body { display: none; padding: 20px; border-top: 1px solid var(--border-color); background-color: var(--bg-color); animation: fadeIn var(--anim-speed); }
         .product-item.expanded .product-body { display: block; }
+
+        /* --- 2-COLUMN & 3-COLUMN GRID VIEW CONFIGURATION --- */
+        #productList.view-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        #productList.view-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        #productList.view-grid-2 .product-item,
+        #productList.view-grid-3 .product-item {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #productList.view-grid-2 .product-header,
+        #productList.view-grid-3 .product-header {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 8px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        #productList.view-grid-2 .checkbox-container,
+        #productList.view-grid-3 .checkbox-container {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            z-index: 10;
+            background: rgba(0,0,0,0.4);
+            border-radius: 4px;
+            padding: 3px;
+        }
+
+        #productList.view-grid-2 .product-thumb-img,
+        #productList.view-grid-3 .product-thumb-img {
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+        #productList.view-grid-2 .product-thumb-img { height: 120px; }
+        #productList.view-grid-3 .product-thumb-img { height: 90px; }
+
+        #productList.view-grid-2 .header-info,
+        #productList.view-grid-3 .header-info {
+            width: 100%;
+        }
+
+        #productList.view-grid-2 .header-top-row,
+        #productList.view-grid-3 .header-top-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 3px;
+        }
+
+        #productList.view-grid-3 .header-name { font-size: 0.85em; }
+        #productList.view-grid-3 .header-price { font-size: 0.9em; }
+        #productList.view-grid-3 .header-bottom-row { font-size: 0.7em; flex-direction: column; gap: 2px; }
+
+        #productList.view-grid-2 .product-item.expanded,
+        #productList.view-grid-3 .product-item.expanded {
+            grid-column: 1 / -1;
+        }
 
         .detail-row { margin-bottom: 10px; font-size: 0.95em; display: flex; justify-content: space-between; }
         .detail-label { font-weight: 600; color: var(--text-color); }
@@ -272,7 +441,21 @@
         <form id="productForm">
             <h3 id="formTitle" style="margin-top:0">Product Details</h3>
             <input type="hidden" id="productId">
+            <input type="hidden" id="productImage">
             <div class="form-group"><label for="productName">Product Name*</label><input type="text" id="productName" required></div>
+            
+            <div class="form-group">
+                <label for="imageUploadInput">Product Image</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="file" id="imageUploadInput" accept="image/*" style="padding: 8px;">
+                    <button type="button" id="removeImgBtn" onclick="removeSelectedImage()" style="display:none; background:#db4437; color:white; padding:10px 14px; border-radius:8px; font-weight:bold; white-space:nowrap;">Remove</button>
+                </div>
+                <div id="uploadStatusText" style="font-size:0.8em; color:var(--secondary-text); margin-top:5px;"></div>
+                <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
+                    <img id="imagePreview" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--border-color); object-fit: contain;">
+                </div>
+            </div>
+
             <div class="form-group"><label for="productNumber">Product Number (SKU)</label><input type="text" id="productNumber"></div>
             <div class="form-group"><label for="productIdInput">Product URL</label><input type="url" id="productIdInput" placeholder="https://example.com/item"></div>
             
@@ -308,12 +491,35 @@
     <div id="salesSection" class="app-section">
         <form id="saleForm" autocomplete="off">
             <h3 style="margin-top:0">Record New Sale</h3>
+            
             <div class="form-group picker-container">
-                <label>Search & Select Product</label>
-                <input type="text" id="saleSearchInput" placeholder="Type product name..." oninput="filterPicker()">
+                <label>Search Product (Name, SKU, or Notes)</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <select id="saleCategoryFilter" onchange="filterPicker()" style="flex: 1; padding: 10px; font-size: 0.85em;">
+                        <option value="all">All Categories</option>
+                        <option value="#fbbc05">Home Organiser🟡</option>
+                        <option value="#db4437">Wall Decor🔴</option>
+                        <option value="#4285f4">Vases & Plants🔵</option>
+                        <option value="#34a853">Showpiece🟢</option>
+                        <option value="#000000">Others⚫</option>
+                    </select>
+                </div>
+                <input type="text" id="saleSearchInput" placeholder="Type name, SKU, details..." onfocus="filterPicker()" oninput="filterPicker()">
                 <input type="hidden" id="selectedSaleId">
                 <div id="pickerResults" class="picker-results"></div>
             </div>
+
+            <!-- Visual Preview Card of Selected Item in Sale -->
+            <div id="selectedProductPreview" style="display: none;" class="selected-product-card">
+                <span class="selected-clear-btn" onclick="clearSelectedSaleProduct()">✕</span>
+                <img id="selectedProdImg" src="" style="display: none;" alt="Thumb">
+                <div id="selectedProdPlaceholder" class="picker-item-placeholder" style="display: none;">📦</div>
+                <div style="flex-grow: 1; min-width: 0; padding-right: 25px;">
+                    <div id="selectedProdName" style="font-weight: bold; font-size: 1em; color: var(--primary-color);"></div>
+                    <div id="selectedProdMeta" style="font-size: 0.8em; color: var(--secondary-text); margin-top: 4px;"></div>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Actual Sold Price (₹)</label>
                 <input type="number" id="soldPrice" required step="0.01" placeholder="0.00">
@@ -350,11 +556,19 @@
             </select>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
             <label style="display:flex; align-items:center; gap:8px; font-size:0.9em; font-weight: bold;">
                 <input type="checkbox" id="selectAllBox" onchange="toggleSelectAll()"> Select All
             </label>
-            <button onclick="copySelectedData()" style="background:var(--primary-color); color:white; border:none; padding:6px 12px; border-radius:6px; font-size:0.85em; font-weight:bold;">📋 Copy Details</button>
+            
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="view-toggle-container">
+                    <button class="view-btn active" id="btnViewList" title="Single Column List" onclick="setListViewMode('list')">☰</button>
+                    <button class="view-btn" id="btnViewGrid2" title="2-Column Grid" onclick="setListViewMode('grid2')">⊞ 2</button>
+                    <button class="view-btn" id="btnViewGrid3" title="3-Column Grid" onclick="setListViewMode('grid3')">▦ 3</button>
+                </div>
+                <button onclick="copySelectedData()" style="background:var(--primary-color); color:white; border:none; padding:8px 12px; border-radius:6px; font-size:0.85em; font-weight:bold;">📋 Copy</button>
+            </div>
         </div>
 
         <div class="scroll-container">
@@ -365,7 +579,7 @@
     <div id="settingsSection" class="app-section">
         <div class="settings-group">
             <h4 style="margin-top:0">Appearance & Customization</h4>
-            <button class="primary-btn" onclick="toggleDarkMode()" id="darkModeButton" style="margin-bottom:20px; background-color: var(--primary-color);"> 🌓 Toggle Dark Mode </button></button>
+            <button class="primary-btn" onclick="toggleDarkMode()" id="darkModeButton" style="margin-bottom:20px; background-color: var(--primary-color);"> 🌓 Toggle Dark Mode </button>
             
             <div class="form-group">
                 <label>Background Patterns</label>
@@ -424,18 +638,20 @@
 <script>
     const STORAGE_KEY = 'productTracker_pro_v1';
     const SALES_KEY = 'productTracker_sales_v1';
+    const VIEW_KEY = 'productTracker_view_mode';
+    const IMGBB_API_KEY = '166b0576b0d7bb3d41486bd762313bba';
     const CURRENCY_FMT = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' });
     let myChart = null;
     let chartFilter = '1m';
+    let currentViewMode = localStorage.getItem(VIEW_KEY) || 'list';
 
-    // UPDATED:
-const CAT_INFO = {
-    "#fbbc05": { name: "Home Organiser", color: "#fbbc05" },
-    "#db4437": { name: "Wall Decor", color: "#db4437" },
-    "#4285f4": { name: "Vases & Plants", color: "#4285f4" },
-    "#34a853": { name: "Showpiece", color: "#34a853" },
-    "#000000": { name: "Others", color: "#888" }
-};
+    const CAT_INFO = {
+        "#fbbc05": { name: "Home Organiser", color: "#fbbc05" },
+        "#db4437": { name: "Wall Decor", color: "#db4437" },
+        "#4285f4": { name: "Vases & Plants", color: "#4285f4" },
+        "#34a853": { name: "Showpiece", color: "#34a853" },
+        "#000000": { name: "Others", color: "#888" }
+    };
 
     /** TIME AGO CALCULATOR **/
     function timeAgo(timestamp) {
@@ -456,9 +672,18 @@ const CAT_INFO = {
 
     function init() {
         if(localStorage.getItem('tracker_dark') === 'true') document.body.classList.add('dark-mode');
+        applyViewMode(currentViewMode);
         renderProducts();
         renderSales();
         updateDashboard();
+        
+        // Close picker when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.picker-container')) {
+                document.getElementById('pickerResults').style.display = 'none';
+            }
+        });
+
         setInterval(() => {
             getProducts().forEach(p => {
                 const el = document.getElementById(`timeago-${p.id}`);
@@ -480,6 +705,29 @@ const CAT_INFO = {
     function getSales() { try { return JSON.parse(localStorage.getItem(SALES_KEY) || '[]'); } catch { return []; } }
     function saveProducts(p) { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); renderProducts(); }
 
+    /* --- GRID / LIST VIEW CONTROLS --- */
+    function setListViewMode(mode) {
+        currentViewMode = mode;
+        localStorage.setItem(VIEW_KEY, mode);
+        applyViewMode(mode);
+    }
+
+    function applyViewMode(mode) {
+        const list = document.getElementById('productList');
+        list.classList.remove('view-grid-2', 'view-grid-3');
+        document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+
+        if (mode === 'grid2') {
+            list.classList.add('view-grid-2');
+            document.getElementById('btnViewGrid2').classList.add('active');
+        } else if (mode === 'grid3') {
+            list.classList.add('view-grid-3');
+            document.getElementById('btnViewGrid3').classList.add('active');
+        } else {
+            document.getElementById('btnViewList').classList.add('active');
+        }
+    }
+
     /* --- CHART FILTERS --- */
     function setChartFilter(range, btn) {
         chartFilter = range;
@@ -493,32 +741,142 @@ const CAT_INFO = {
     function updateAnimations(speed) { document.documentElement.style.setProperty('--anim-speed', speed); }
     function updateOpacity(val) { document.documentElement.style.setProperty('--card-opacity', val); }
 
-    /* --- SEARCHABLE PICKER LOGIC --- */
+    /* --- ENHANCED SEARCHABLE PICKER LOGIC (MULTI-CRITERIA & VISUALS) --- */
     function filterPicker() {
         const products = getProducts();
-        const term = document.getElementById('saleSearchInput').value.toLowerCase();
+        const term = document.getElementById('saleSearchInput').value.toLowerCase().trim();
+        const categoryFilter = document.getElementById('saleCategoryFilter').value;
         const results = document.getElementById('pickerResults');
         results.innerHTML = '';
-        const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+
+        const filtered = products.filter(p => {
+            const matchesCat = categoryFilter === 'all' || p.color === categoryFilter;
+            const matchesSearch = !term || 
+                p.name.toLowerCase().includes(term) ||
+                (p.number && p.number.toLowerCase().includes(term)) ||
+                (p.details && p.details.toLowerCase().includes(term));
+            return matchesCat && matchesSearch;
+        });
+
         if (filtered.length > 0) {
             results.style.display = 'block';
             filtered.forEach(p => {
+                const catInfo = CAT_INFO[p.color] || { name: 'Other', color: '#888' };
                 const div = document.createElement('div');
                 div.className = 'picker-item';
-                div.textContent = p.name + (p.available ? "" : " (Out)");
-                div.onclick = () => {
-                    document.getElementById('saleSearchInput').value = p.name;
-                    document.getElementById('selectedSaleId').value = p.id;
-                    results.style.display = 'none';
-                };
+                div.innerHTML = `
+                    ${p.image ? `<img src="${p.image}" class="picker-item-img" alt="thumb">` : `<div class="picker-item-placeholder">📦</div>`}
+                    <div class="picker-item-info">
+                        <div class="picker-item-title">${escapeHtml(p.name)}</div>
+                        <div class="picker-item-meta">
+                            <span style="color:${catInfo.color}; font-weight:bold;">● ${catInfo.name}</span>
+                            <span>SKU: <b>${escapeHtml(p.number || '-')}</b></span>
+                            <span>Target: <b>${CURRENCY_FMT.format(p.resalePrice)}</b></span>
+                            <span class="status-badge ${p.available ? 'status-in-stock' : 'status-out-of-stock'}">${p.available ? 'In Stock' : 'Out'}</span>
+                        </div>
+                    </div>
+                `;
+                div.onclick = () => selectProductForSale(p);
                 results.appendChild(div);
             });
-        } else { results.style.display = 'none'; }
+        } else { 
+            results.style.display = 'none'; 
+        }
+    }
+
+    function selectProductForSale(p) {
+        document.getElementById('selectedSaleId').value = p.id;
+        document.getElementById('saleSearchInput').value = p.name;
+        document.getElementById('soldPrice').value = p.resalePrice || '';
+        document.getElementById('pickerResults').style.display = 'none';
+
+        // Render visual selected card
+        const card = document.getElementById('selectedProductPreview');
+        const img = document.getElementById('selectedProdImg');
+        const placeholder = document.getElementById('selectedProdPlaceholder');
+        const catInfo = CAT_INFO[p.color] || { name: 'Other', color: '#888' };
+
+        document.getElementById('selectedProdName').textContent = p.name;
+        document.getElementById('selectedProdMeta').innerHTML = `
+            <span style="color:${catInfo.color}; font-weight:bold;">● ${catInfo.name}</span> | 
+            SKU: <b>${p.number || '-'}</b> | 
+            Cost: <b>${CURRENCY_FMT.format(p.buyPrice)}</b> | 
+            Target Sell: <b>${CURRENCY_FMT.format(p.resalePrice)}</b>
+        `;
+
+        if (p.image) {
+            img.src = p.image;
+            img.style.display = 'block';
+            placeholder.style.display = 'none';
+        } else {
+            img.style.display = 'none';
+            placeholder.style.display = 'flex';
+        }
+
+        card.style.display = 'flex';
+    }
+
+    function clearSelectedSaleProduct() {
+        document.getElementById('selectedSaleId').value = '';
+        document.getElementById('saleSearchInput').value = '';
+        document.getElementById('soldPrice').value = '';
+        document.getElementById('selectedProductPreview').style.display = 'none';
+    }
+
+    /* --- IMGBB UPLOAD LOGIC --- */
+    async function uploadToImgBB(file) {
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+        if (data && data.success) {
+            return data.data.url;
+        } else {
+            throw new Error(data.error ? data.error.message : 'Image upload failed');
+        }
+    }
+
+    function removeSelectedImage() {
+        document.getElementById('productImage').value = '';
+        document.getElementById('imageUploadInput').value = '';
+        document.getElementById('imagePreview').src = '';
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+        document.getElementById('removeImgBtn').style.display = 'none';
+        document.getElementById('uploadStatusText').textContent = '';
     }
 
     // --- PRODUCT FORM SUBMIT ---
-    document.getElementById('productForm').addEventListener('submit', (e) => {
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+        const submitBtn = document.getElementById('submitButton');
+        const statusText = document.getElementById('uploadStatusText');
+        const fileInput = document.getElementById('imageUploadInput');
+        
+        let imageUrl = document.getElementById('productImage').value || '';
+
+        // If new file chosen, upload to ImgBB
+        if (fileInput.files && fileInput.files[0]) {
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ Uploading Image...';
+                statusText.textContent = 'Uploading image to ImgBB...';
+                imageUrl = await uploadToImgBB(fileInput.files[0]);
+                statusText.textContent = '';
+            } catch (err) {
+                alert('Upload error: ' + err.message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📦 Save to Inventory';
+                statusText.textContent = 'Upload failed!';
+                return;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📦 Save to Inventory';
+            }
+        }
+
         const products = getProducts();
         const id = document.getElementById('productId').value || Date.now().toString();
         const existing = products.find(x => x.id === id);
@@ -528,6 +886,7 @@ const CAT_INFO = {
         const p = {
             id,
             name: document.getElementById('productName').value,
+            image: imageUrl,
             number: document.getElementById('productNumber').value,
             url: document.getElementById('productIdInput').value,
             buyPrice: buy,
@@ -545,8 +904,11 @@ const CAT_INFO = {
         const idx = products.findIndex(x => x.id === id);
         if(idx > -1) products[idx] = p; else products.push(p);
         saveProducts(products);
+        
         e.target.reset();
+        removeSelectedImage();
         document.getElementById('productId').value = '';
+        document.getElementById('formTitle').innerText = "Product Details";
         showSection('listSection');
     });
 
@@ -557,7 +919,7 @@ const CAT_INFO = {
         const products = getProducts();
         const pId = document.getElementById('selectedSaleId').value;
         const product = products.find(p => p.id === pId);
-        if(!product) return alert("Select product");
+        if(!product) return alert("Please select a product from search results.");
         
         const soldPrice = parseFloat(document.getElementById('soldPrice').value);
         sales.push({
@@ -571,8 +933,7 @@ const CAT_INFO = {
         });
         localStorage.setItem(SALES_KEY, JSON.stringify(sales));
         e.target.reset();
-        document.getElementById('selectedSaleId').value = '';
-        document.getElementById('saleSearchInput').value = '';
+        clearSelectedSaleProduct();
         renderSales();
         updateDashboard();
     });
@@ -607,18 +968,20 @@ const CAT_INFO = {
             li.innerHTML = `
                 <div class="product-header" onclick="document.getElementById('item-${p.id}').classList.toggle('expanded')">
                     <div class="checkbox-container"><input type="checkbox" class="item-checkbox" value="${p.id}" onclick="event.stopPropagation()"></div>
+                    ${p.image ? `<img src="${p.image}" class="product-thumb-img" alt="${escapeHtml(p.name)}">` : ''}
                     <div class="header-info">
                         <div class="header-top-row">
                             <div class="header-name"><span class="color-dot" style="background-color:${p.color}"></span><span class="name-text">#${i+1} ${escapeHtml(p.name)}</span></div>
                             <span class="header-price">${CURRENCY_FMT.format(p.resalePrice)}</span>
                         </div>
                         <div class="header-bottom-row">
-                            <span class="status-badge ${p.available ? 'status-in-stock' : 'status-out-of-stock'}">${p.available ? 'IN STOCK' : 'OUT'}</span>
-                            <span style="color:${p.profit >= 0 ? 'var(--profit-color)' : 'var(--alert-color)'}">Profit: ${CURRENCY_FMT.format(p.profit)} (${p.profitPercent}%)</span>
+                            <span class="status-badge ${p.available ? 'status-in-stock' : 'status-out-of-stock'}">${p.available ? 'IN' : 'OUT'}</span>
+                            <span style="color:${p.profit >= 0 ? 'var(--profit-color)' : 'var(--alert-color)'}">+${CURRENCY_FMT.format(p.profit)} (${p.profitPercent}%)</span>
                         </div>
                     </div>
                 </div>
                 <div class="product-body">
+                    ${p.image ? `<div style="text-align:center; margin-bottom:15px;"><a href="${p.image}" target="_blank"><img src="${p.image}" style="max-width:100%; max-height:220px; border-radius:8px; border:1px solid var(--border-color); object-fit:contain;"></a></div>` : ''}
                     <div class="detail-row"><span class="detail-label">SKU:</span> <span class="detail-value">${escapeHtml(p.number || '-')}</span></div>
                     <div class="detail-row"><span class="detail-label">Link:</span> <span class="detail-value">${p.url ? `<a href="${p.url}" target="_blank" class="link-style">Open Link 🔗</a>` : '-'}</span></div>
                     <div class="detail-row"><span class="detail-label">Buy Price:</span> <span class="detail-value">${CURRENCY_FMT.format(p.buyPrice)}</span></div>
@@ -640,7 +1003,7 @@ const CAT_INFO = {
         const sales = getSales();
         const list = document.getElementById('salesList');
         list.innerHTML = '';
-        sales.reverse().forEach(s => {
+        sales.slice().reverse().forEach(s => {
             const li = document.createElement('li');
             li.style = "background:var(--card-bg); border:1px solid var(--border-color); padding:12px; border-radius:8px; margin-bottom:10px; font-size:0.9em;";
             const color = s.profit >= 0 ? 'var(--profit-color)' : 'var(--alert-color)';
@@ -713,6 +1076,7 @@ const CAT_INFO = {
         const p = getProducts().find(x => x.id === id);
         document.getElementById('productId').value = p.id;
         document.getElementById('productName').value = p.name;
+        document.getElementById('productImage').value = p.image || '';
         document.getElementById('productNumber').value = p.number;
         document.getElementById('productIdInput').value = p.url;
         document.getElementById('originalPrice').value = p.buyPrice;
@@ -721,6 +1085,18 @@ const CAT_INFO = {
         document.getElementById('productDetails').value = p.details;
         document.getElementById('productColor').value = p.color;
         document.getElementById('productAvailability').value = p.available.toString();
+        
+        const preview = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const removeBtn = document.getElementById('removeImgBtn');
+        if (p.image) {
+            preview.src = p.image;
+            previewContainer.style.display = 'block';
+            removeBtn.style.display = 'inline-block';
+        } else {
+            removeSelectedImage();
+        }
+
         document.getElementById('formTitle').innerText = "Edit Product";
         showSection('addSection');
     }
