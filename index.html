@@ -21,6 +21,7 @@
             --footer-bg: #e0e0e0;
             --alert-color: #d93025; 
             --profit-color: #188038; 
+            --pending-color: #f29900;
             --header-hover: #f1f1f1;
             --focus-ring: 2px solid #1a73e8;
             /* Graphics & Animation Variables */
@@ -42,6 +43,7 @@
             --footer-bg: #1e1e1e;
             --alert-color: #ff6e6e;
             --profit-color: #81C784;
+            --pending-color: #fbbc04;
             --header-hover: #333;
         }
 
@@ -233,6 +235,53 @@
             cursor: pointer;
         }
 
+        /* --- NEW SALES UI COMPONENTS --- */
+        .sale-section-group {
+            background: rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .sale-section-title {
+            margin: 0 0 15px 0;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--secondary-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sale-summary-box {
+            background: var(--card-bg);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: var(--secondary-text);
+        }
+        .summary-row.total {
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+            margin-top: 10px;
+            margin-bottom: 0;
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
+        .status-in-stock, .status-paid { background-color: rgba(52, 168, 83, 0.2); color: #34a853; }
+        .status-out-of-stock { background-color: rgba(219, 68, 55, 0.2); color: #db4437; }
+        .status-pending { background-color: rgba(219, 68, 55, 0.15); color: #db4437; }
+        .status-partial { background-color: rgba(242, 153, 0, 0.2); color: var(--pending-color); }
+
         /* --- PRODUCT LIST & GRID VIEW MODES --- */
         .scroll-container {
             max-height: 60vh;
@@ -246,38 +295,13 @@
 
         #productList, #salesList { list-style: none; padding: 0; margin: 0; }
         
-        .view-toggle-container {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-        .view-btn {
-            background: var(--card-bg);
-            border: 1.5px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.85em;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .view-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
+        .view-toggle-container { display: flex; gap: 6px; align-items: center; }
+        .view-btn { background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--text-color); padding: 8px 12px; border-radius: 8px; font-size: 0.85em; font-weight: bold; cursor: pointer; }
+        .view-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
 
         .product-item { background-color: var(--card-bg); border: 1px solid var(--border-color); margin-bottom: 12px; border-radius: 8px; overflow: hidden; transition: all 0.2s ease; }
         
-        .product-thumb-img {
-            width: 44px;
-            height: 44px;
-            border-radius: 6px;
-            object-fit: cover;
-            margin-right: 10px;
-            border: 1px solid var(--border-color);
-            flex-shrink: 0;
-        }
+        .product-thumb-img { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; margin-right: 10px; border: 1px solid var(--border-color); flex-shrink: 0; }
 
         .product-header { display: flex; align-items: center; padding: 12px; cursor: pointer; user-select: none; }
         .checkbox-container { padding-right: 12px; display: flex; align-items: center; }
@@ -294,84 +318,26 @@
         .product-item.expanded .product-body { display: block; }
 
         /* --- 2-COLUMN & 3-COLUMN GRID VIEW CONFIGURATION --- */
-        #productList.view-grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        #productList.view-grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
+        #productList.view-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        #productList.view-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 
-        #productList.view-grid-2 .product-item,
-        #productList.view-grid-3 .product-item {
-            margin-bottom: 0;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        #productList.view-grid-2 .product-header,
-        #productList.view-grid-3 .product-header {
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 8px;
-            height: 100%;
-            box-sizing: border-box;
-        }
-
-        #productList.view-grid-2 .checkbox-container,
-        #productList.view-grid-3 .checkbox-container {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            z-index: 10;
-            background: rgba(0,0,0,0.4);
-            border-radius: 4px;
-            padding: 3px;
-        }
-
-        #productList.view-grid-2 .product-thumb-img,
-        #productList.view-grid-3 .product-thumb-img {
-            width: 100%;
-            margin-right: 0;
-            margin-bottom: 8px;
-            border-radius: 6px;
-        }
+        #productList.view-grid-2 .product-item, #productList.view-grid-3 .product-item { margin-bottom: 0; display: flex; flex-direction: column; position: relative; }
+        #productList.view-grid-2 .product-header, #productList.view-grid-3 .product-header { flex-direction: column; align-items: flex-start; padding: 8px; height: 100%; box-sizing: border-box; }
+        #productList.view-grid-2 .checkbox-container, #productList.view-grid-3 .checkbox-container { position: absolute; top: 6px; left: 6px; z-index: 10; background: rgba(0,0,0,0.4); border-radius: 4px; padding: 3px; }
+        #productList.view-grid-2 .product-thumb-img, #productList.view-grid-3 .product-thumb-img { width: 100%; margin-right: 0; margin-bottom: 8px; border-radius: 6px; }
         #productList.view-grid-2 .product-thumb-img { height: 120px; }
         #productList.view-grid-3 .product-thumb-img { height: 90px; }
-
-        #productList.view-grid-2 .header-info,
-        #productList.view-grid-3 .header-info {
-            width: 100%;
-        }
-
-        #productList.view-grid-2 .header-top-row,
-        #productList.view-grid-3 .header-top-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 3px;
-        }
-
+        #productList.view-grid-2 .header-info, #productList.view-grid-3 .header-info { width: 100%; }
+        #productList.view-grid-2 .header-top-row, #productList.view-grid-3 .header-top-row { flex-direction: column; align-items: flex-start; gap: 3px; }
         #productList.view-grid-3 .header-name { font-size: 0.85em; }
         #productList.view-grid-3 .header-price { font-size: 0.9em; }
         #productList.view-grid-3 .header-bottom-row { font-size: 0.7em; flex-direction: column; gap: 2px; }
-
-        #productList.view-grid-2 .product-item.expanded,
-        #productList.view-grid-3 .product-item.expanded {
-            grid-column: 1 / -1;
-        }
+        #productList.view-grid-2 .product-item.expanded, #productList.view-grid-3 .product-item.expanded { grid-column: 1 / -1; }
 
         .detail-row { margin-bottom: 10px; font-size: 0.95em; display: flex; justify-content: space-between; }
         .detail-label { font-weight: 600; color: var(--text-color); }
         .detail-value { color: var(--secondary-text); }
         .link-style { color: var(--primary-color); text-decoration: underline; word-break: break-all; font-weight: bold; }
-
-        .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
-        .status-in-stock { background-color: rgba(52, 168, 83, 0.2); color: #34a853; }
-        .status-out-of-stock { background-color: rgba(219, 68, 55, 0.2); color: #db4437; }
 
         .actions { margin-top: 20px; display: flex; gap: 8px; }
         .action-btn { padding: 10px; border: none; border-radius: 6px; color: white; flex: 1; font-size: 0.9em; font-weight: bold; }
@@ -400,8 +366,8 @@
         <div class="dashboard">
             <div class="dash-item"><span class="dash-label">Investment</span><span class="dash-value" id="dashInvest">₹0</span></div>
             <div class="dash-item"><span class="dash-label">Total Sales</span><span class="dash-value" id="dashSalesTotal">₹0</span></div>
-            <div class="dash-item"><span class="dash-label">In Stock</span><span class="dash-value" id="dashInStock" style="color:var(--profit-color)">0</span></div>
-            <div class="dash-item"><span class="dash-label">Out of Stock</span><span class="dash-value" id="dashOutStock" style="color:var(--alert-color)">0</span></div>
+            <div class="dash-item"><span class="dash-label">In Stock (Units)</span><span class="dash-value" id="dashInStock" style="color:var(--profit-color)">0</span></div>
+            <div class="dash-item"><span class="dash-label">Out of Stock (SKUs)</span><span class="dash-value" id="dashOutStock" style="color:var(--alert-color)">0</span></div>
         </div>
 
         <div class="dashboard" style="grid-template-columns: 1fr;">
@@ -460,8 +426,26 @@
             <div class="form-group"><label for="productIdInput">Product URL</label><input type="url" id="productIdInput" placeholder="https://example.com/item"></div>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div class="form-group"><label for="originalPrice">Buy Price (₹)</label><input type="number" id="originalPrice" step="0.01" placeholder="0.00"></div>
-                <div class="form-group"><label for="resalePrice">Target Sell Price (₹)</label><input type="number" id="resalePrice" step="0.01" placeholder="0.00"></div>
+                <div class="form-group"><label for="originalPrice">Buy Price (₹/pc)</label><input type="number" id="originalPrice" step="0.01" placeholder="0.00"></div>
+                <div class="form-group"><label for="resalePrice">Target Sell Price (₹/pc)</label><input type="number" id="resalePrice" step="0.01" placeholder="0.00"></div>
+            </div>
+            
+            <div id="newStockDiv" class="form-group">
+                <label for="stockQuantity">Initial Stock Quantity (pcs)</label>
+                <input type="number" id="stockQuantity" min="0" placeholder="1" required>
+            </div>
+
+            <div id="editStockDiv" class="form-group" style="display: none; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+                <label style="margin-bottom: 10px;">Manage Inventory <span style="font-weight: normal; color: var(--secondary-text);">(Current Stock: <b id="displayCurrentStock" style="color: var(--primary-color);">0</b> pcs)</span></label>
+                <div style="display: flex; gap: 8px;">
+                    <select id="stockAction" style="flex: 1; padding: 10px;">
+                        <option value="none">No Change</option>
+                        <option value="add">➕ Add Stock</option>
+                        <option value="remove">➖ Remove Stock</option>
+                    </select>
+                    <input type="number" id="adjustQuantity" min="1" placeholder="Qty" style="flex: 1; padding: 10px;">
+                </div>
+                <div id="stockPreview" style="font-size: 0.85em; margin-top: 8px; color: var(--secondary-text); font-weight: bold;"></div>
             </div>
 
             <div class="form-group"><label for="stockCheckDate">Stock Checked Date</label><input type="date" id="stockCheckDate"></div>
@@ -477,53 +461,169 @@
                     <option value="#000000">Others⚫</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="productAvailability">Current Status</label>
-                <select id="productAvailability">
-                    <option value="true">✅ In Stock</option>
-                    <option value="false">❌ Out of Stock</option>
-                </select>
-            </div>
             <button type="submit" class="primary-btn" id="submitButton">📦 Save to Inventory</button>
         </form>
     </div>
 
+    <!-- ENHANCED SALES SECTION -->
     <div id="salesSection" class="app-section">
         <form id="saleForm" autocomplete="off">
-            <h3 style="margin-top:0">Record New Sale</h3>
+            <h3 style="margin-top:0; margin-bottom:20px; display: flex; justify-content: space-between; align-items: center;">
+                Record New Sale
+                <span id="displayInvoiceNo" style="font-size: 0.6em; color: var(--secondary-text); font-weight: normal; background: var(--bg-color); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color);"></span>
+            </h3>
             
-            <div class="form-group picker-container">
-                <label>Search Product (Name, SKU, or Notes)</label>
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                    <select id="saleCategoryFilter" onchange="filterPicker()" style="flex: 1; padding: 10px; font-size: 0.85em;">
-                        <option value="all">All Categories</option>
-                        <option value="#fbbc05">Home Organiser🟡</option>
-                        <option value="#db4437">Wall Decor🔴</option>
-                        <option value="#4285f4">Vases & Plants🔵</option>
-                        <option value="#34a853">Showpiece🟢</option>
-                        <option value="#000000">Others⚫</option>
-                    </select>
+            <!-- A. SALE DETAILS -->
+            <div class="sale-section-group">
+                <div class="sale-section-title">A. Sale Details</div>
+                
+                <div class="form-group picker-container">
+                    <label>Search Product (Name, SKU, or Notes)</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <select id="saleCategoryFilter" onchange="filterPicker()" style="flex: 1; padding: 10px; font-size: 0.85em;">
+                            <option value="all">All Categories</option>
+                            <option value="#fbbc05">Home Organiser🟡</option>
+                            <option value="#db4437">Wall Decor🔴</option>
+                            <option value="#4285f4">Vases & Plants🔵</option>
+                            <option value="#34a853">Showpiece🟢</option>
+                            <option value="#000000">Others⚫</option>
+                        </select>
+                    </div>
+                    <input type="text" id="saleSearchInput" placeholder="Type name, SKU, details..." onfocus="filterPicker()" oninput="filterPicker()">
+                    <input type="hidden" id="selectedSaleId">
+                    <div id="pickerResults" class="picker-results"></div>
                 </div>
-                <input type="text" id="saleSearchInput" placeholder="Type name, SKU, details..." onfocus="filterPicker()" oninput="filterPicker()">
-                <input type="hidden" id="selectedSaleId">
-                <div id="pickerResults" class="picker-results"></div>
+
+                <!-- Visual Preview Card -->
+                <div id="selectedProductPreview" style="display: none;" class="selected-product-card">
+                    <span class="selected-clear-btn" onclick="clearSelectedSaleProduct()">✕</span>
+                    <img id="selectedProdImg" src="" style="display: none;" alt="Thumb">
+                    <div id="selectedProdPlaceholder" class="picker-item-placeholder" style="display: none;">📦</div>
+                    <div style="flex-grow: 1; min-width: 0; padding-right: 25px;">
+                        <div id="selectedProdName" style="font-weight: bold; font-size: 1em; color: var(--primary-color);"></div>
+                        <div id="selectedProdMeta" style="font-size: 0.8em; color: var(--secondary-text); margin-top: 4px;"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label>Quantity Sold</label>
+                        <input type="number" id="saleQuantity" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sold Price (₹/pc)</label>
+                        <input type="number" id="soldPrice" required step="0.01" placeholder="0.00">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label>Discount</label>
+                        <div style="display: flex; gap: 5px;">
+                            <select id="saleDiscountType" style="flex: 0.8; padding: 10px;">
+                                <option value="amount">₹</option>
+                                <option value="percent">%</option>
+                            </select>
+                            <input type="number" id="saleDiscount" step="0.01" min="0" value="0" placeholder="0" style="flex: 1.2;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Shipping Charged (₹)</label>
+                        <input type="number" id="saleShipping" step="0.01" min="0" value="0" placeholder="0.00">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Actual Delivery Cost (₹) <span style="font-weight:normal; color:var(--secondary-text);">(For your profit calculation)</span></label>
+                    <input type="number" id="saleDeliveryCost" step="0.01" min="0" value="0" placeholder="0.00">
+                </div>
+
+                <!-- LIVE MATH SUMMARY -->
+                <div class="sale-summary-box">
+                    <div class="summary-row"><span>Subtotal</span> <span id="lblSubtotal">₹0.00</span></div>
+                    <div class="summary-row"><span>Discount</span> <span id="lblDiscount" style="color: var(--alert-color);">-₹0.00</span></div>
+                    <div class="summary-row"><span>Shipping Charged</span> <span id="lblShipping">₹0.00</span></div>
+                    <div class="summary-row total"><span>Final Amount</span> <span id="lblFinalAmount" style="color: var(--primary-color);">₹0.00</span></div>
+                    
+                    <!-- NEW PROFITABILITY PREVIEW -->
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border-color);">
+                        <div class="summary-row" style="font-size: 0.9em;"><span>Product Cost</span> <span id="lblProductCost">₹0.00</span></div>
+                        <div class="summary-row" style="font-size: 0.9em;"><span>Actual Delivery Cost</span> <span id="lblDeliveryCost">₹0.00</span></div>
+                        <div class="summary-row" style="font-weight: bold; margin-top: 5px;"><span>Estimated Profit</span> <span id="lblEstimatedProfit" style="color: var(--profit-color);">₹0.00</span></div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Visual Preview Card of Selected Item in Sale -->
-            <div id="selectedProductPreview" style="display: none;" class="selected-product-card">
-                <span class="selected-clear-btn" onclick="clearSelectedSaleProduct()">✕</span>
-                <img id="selectedProdImg" src="" style="display: none;" alt="Thumb">
-                <div id="selectedProdPlaceholder" class="picker-item-placeholder" style="display: none;">📦</div>
-                <div style="flex-grow: 1; min-width: 0; padding-right: 25px;">
-                    <div id="selectedProdName" style="font-weight: bold; font-size: 1em; color: var(--primary-color);"></div>
-                    <div id="selectedProdMeta" style="font-size: 0.8em; color: var(--secondary-text); margin-top: 4px;"></div>
+            <!-- B. CUSTOMER DETAILS -->
+            <div class="sale-section-group">
+                <div class="sale-section-title" onclick="document.getElementById('customerFields').style.display = document.getElementById('customerFields').style.display === 'none' ? 'block' : 'none';" style="cursor: pointer;">
+                    B. Customer Details (Optional) <span style="font-size: 1.2em; line-height: 0.5;">▾</span>
+                </div>
+                <div id="customerFields" style="display: none;">
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" id="saleCustomerName" placeholder="Enter name...">
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Phone</label>
+                        <input type="tel" id="saleCustomerPhone" placeholder="Enter phone number...">
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Actual Sold Price (₹)</label>
-                <input type="number" id="soldPrice" required step="0.01" placeholder="0.00">
+            <!-- C. PAYMENT -->
+            <div class="sale-section-group">
+                <div class="sale-section-title">C. Payment</div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="salePaymentMethod">
+                            <option value="UPI">UPI</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Card">Card</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Status</label>
+                        <select id="salePaymentStatus">
+                            <option value="Paid">✅ Paid</option>
+                            <option value="Pending">⏳ Pending</option>
+                            <option value="Partial">🟡 Partial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="partialPaymentBox" style="display: none; background: var(--bg-color); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Amount Paid (₹)</label>
+                            <input type="number" id="saleAmountPaid" step="0.01" min="0" placeholder="0.00">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Balance Due (₹)</label>
+                            <input type="text" id="saleBalanceDue" readonly style="background: rgba(0,0,0,0.05); font-weight: bold; color: var(--alert-color);">
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- D. ADDITIONAL DETAILS -->
+            <div class="sale-section-group">
+                <div class="sale-section-title">D. Additional Details</div>
+                
+                <div class="form-group">
+                    <label>Sale Date & Time</label>
+                    <input type="datetime-local" id="saleDateInput" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Notes</label>
+                    <textarea id="saleNotes" rows="2" placeholder="Any additional information about this sale..."></textarea>
+                </div>
+            </div>
+            
             <button type="submit" class="primary-btn">💰 Confirm Sale</button>
         </form>
 
@@ -533,6 +633,7 @@
         </div>
     </div>
 
+    <!-- LIST SECTION -->
     <div id="listSection" class="app-section">
         <input type="text" id="searchBar" placeholder="🔍 Search inventory..." aria-label="Search">
         
@@ -576,6 +677,7 @@
         </div>
     </div>
 
+    <!-- SETTINGS SECTION -->
     <div id="settingsSection" class="app-section">
         <div class="settings-group">
             <h4 style="margin-top:0">Appearance & Customization</h4>
@@ -629,8 +731,8 @@
 
 <nav class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('dashSection')">Dash</button>
-    <button class="nav-tab" onclick="showSection('addSection')">Add</button>
-    <button class="nav-tab" onclick="showSection('salesSection')">Sales</button>
+    <button class="nav-tab" onclick="prepareAddForm()">Add</button>
+    <button class="nav-tab" onclick="prepareSaleForm(); showSection('salesSection')">Sales</button>
     <button class="nav-tab" onclick="showSection('listSection')">List</button>
     <button class="nav-tab" onclick="showSection('settingsSection')">Settings</button>
 </nav>
@@ -644,6 +746,14 @@
     let myChart = null;
     let chartFilter = '1m';
     let currentViewMode = localStorage.getItem(VIEW_KEY) || 'list';
+    
+    // Live Sale Math Global tracking
+    let currentLiveFinalAmount = 0;
+    let nextInvoiceNumber = '';
+
+    // --- NEW IMAGE STATE MANAGEMENT ---
+    let optimizedImageFile = null;
+    let imagePreviewUrl = null;
 
     const CAT_INFO = {
         "#fbbc05": { name: "Home Organiser", color: "#fbbc05" },
@@ -701,8 +811,106 @@
         if(id === 'dashSection') updateDashboard();
     }
 
-    function getProducts() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; } }
-    function getSales() { try { return JSON.parse(localStorage.getItem(SALES_KEY) || '[]'); } catch { return []; } }
+    // Completely reset Add form and prepare for a brand new product
+    function prepareAddForm() {
+        document.getElementById('productForm').reset();
+        document.getElementById('productId').value = '';
+        removeSelectedImage();
+        document.getElementById('formTitle').innerText = "Product Details";
+        
+        document.getElementById('newStockDiv').style.display = 'block';
+        document.getElementById('stockQuantity').required = true;
+        
+        document.getElementById('editStockDiv').style.display = 'none';
+        document.getElementById('adjustQuantity').required = false;
+        
+        showSection('addSection');
+    }
+
+    // Dynamic stock adjustment preview
+    document.getElementById('stockAction').addEventListener('change', updateStockPreview);
+    document.getElementById('adjustQuantity').addEventListener('input', updateStockPreview);
+
+    function updateStockPreview() {
+        const current = parseInt(document.getElementById('displayCurrentStock').textContent) || 0;
+        const action = document.getElementById('stockAction').value;
+        const adj = parseInt(document.getElementById('adjustQuantity').value) || 0;
+        const previewDiv = document.getElementById('stockPreview');
+        
+        if (action === 'none' || adj === 0) {
+            previewDiv.textContent = `Resulting stock will be: ${current} pcs`;
+            previewDiv.style.color = "var(--secondary-text)";
+        } else if (action === 'add') {
+            previewDiv.textContent = `Resulting stock will be: ${current + adj} pcs`;
+            previewDiv.style.color = "var(--profit-color)";
+        } else if (action === 'remove') {
+            if (current - adj < 0) {
+                previewDiv.textContent = `Error: Cannot remove ${adj} pcs. Only ${current} available.`;
+                previewDiv.style.color = "var(--alert-color)";
+            } else {
+                previewDiv.textContent = `Resulting stock will be: ${current - adj} pcs`;
+                previewDiv.style.color = "var(--alert-color)";
+            }
+        }
+    }
+
+    function getProducts() { 
+        try { 
+            let items = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); 
+            // Backward compatibility logic to support old datasets without quantities & history
+            return items.map(p => {
+                if(p.currentQuantity === undefined) {
+                    p.currentQuantity = p.available ? 1 : 0;
+                    p.initialQuantity = p.currentQuantity;
+                }
+                if(p.stockHistory === undefined) {
+                    p.stockHistory = [];
+                }
+                // Force sync availability status based on quantity
+                p.available = p.currentQuantity > 0;
+                return p;
+            });
+        } catch { return []; } 
+    }
+    
+    function getSales() { 
+        try { 
+            let items = JSON.parse(localStorage.getItem(SALES_KEY) || '[]'); 
+            // Backward compatibility mapping for old sales missing the new detailed fields
+            return items.map(s => {
+                if(s.qty === undefined) s.qty = 1;
+                
+                // If subtotal doesn't exist, reconstruct it
+                if(s.subtotal === undefined) {
+                    s.subtotal = s.totalSold !== undefined ? s.totalSold : (s.soldPrice * s.qty);
+                }
+                
+                if(s.discount === undefined) s.discount = 0;
+                if(s.discountType === undefined) s.discountType = "amount";
+                if(s.shippingCharge === undefined) s.shippingCharge = 0;
+                if(s.deliveryCost === undefined) s.deliveryCost = 0;
+                
+                if(s.finalAmount === undefined) {
+                    s.finalAmount = s.totalSold !== undefined ? s.totalSold : s.subtotal;
+                }
+                
+                if(s.amountPaid === undefined) s.amountPaid = s.finalAmount;
+                if(s.balanceDue === undefined) s.balanceDue = 0;
+                if(s.paymentStatus === undefined) s.paymentStatus = "Paid";
+                if(s.paymentMethod === undefined) s.paymentMethod = "Other";
+                
+                if(s.customerName === undefined) s.customerName = "";
+                if(s.customerPhone === undefined) s.customerPhone = "";
+                if(s.notes === undefined) s.notes = "";
+                
+                if(s.saleDate === undefined) s.saleDate = s.date || s.id;
+                if(s.invoiceNo === undefined) s.invoiceNo = "INV-OLD-" + String(s.id).slice(-4);
+                
+                return s;
+            });
+        } catch { return []; } 
+    }
+    
     function saveProducts(p) { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); renderProducts(); }
 
     /* --- GRID / LIST VIEW CONTROLS --- */
@@ -765,14 +973,14 @@
                 const div = document.createElement('div');
                 div.className = 'picker-item';
                 div.innerHTML = `
-                    ${p.image ? `<img src="${p.image}" class="picker-item-img" alt="thumb">` : `<div class="picker-item-placeholder">📦</div>`}
+                    ${p.image ? `<img src="${p.image}" loading="lazy" class="picker-item-img" alt="thumb">` : `<div class="picker-item-placeholder">📦</div>`}
                     <div class="picker-item-info">
                         <div class="picker-item-title">${escapeHtml(p.name)}</div>
                         <div class="picker-item-meta">
                             <span style="color:${catInfo.color}; font-weight:bold;">● ${catInfo.name}</span>
                             <span>SKU: <b>${escapeHtml(p.number || '-')}</b></span>
-                            <span>Target: <b>${CURRENCY_FMT.format(p.resalePrice)}</b></span>
-                            <span class="status-badge ${p.available ? 'status-in-stock' : 'status-out-of-stock'}">${p.available ? 'In Stock' : 'Out'}</span>
+                            <span>Target: <b>${CURRENCY_FMT.format(p.resalePrice)}/pc</b></span>
+                            <span class="status-badge ${p.currentQuantity > 0 ? 'status-in-stock' : 'status-out-of-stock'}">${p.currentQuantity > 0 ? p.currentQuantity + ' In Stock' : 'Out of Stock'}</span>
                         </div>
                     </div>
                 `;
@@ -785,9 +993,15 @@
     }
 
     function selectProductForSale(p) {
+        if(p.currentQuantity <= 0) {
+            alert("❌ This product is currently Out of Stock!");
+            return;
+        }
+
         document.getElementById('selectedSaleId').value = p.id;
         document.getElementById('saleSearchInput').value = p.name;
         document.getElementById('soldPrice').value = p.resalePrice || '';
+        document.getElementById('saleQuantity').value = 1; 
         document.getElementById('pickerResults').style.display = 'none';
 
         // Render visual selected card
@@ -800,8 +1014,7 @@
         document.getElementById('selectedProdMeta').innerHTML = `
             <span style="color:${catInfo.color}; font-weight:bold;">● ${catInfo.name}</span> | 
             SKU: <b>${p.number || '-'}</b> | 
-            Cost: <b>${CURRENCY_FMT.format(p.buyPrice)}</b> | 
-            Target Sell: <b>${CURRENCY_FMT.format(p.resalePrice)}</b>
+            Stock: <b style="color:var(--profit-color)">${p.currentQuantity} pcs</b>
         `;
 
         if (p.image) {
@@ -814,29 +1027,245 @@
         }
 
         card.style.display = 'flex';
+        updateSaleMath();
     }
 
     function clearSelectedSaleProduct() {
         document.getElementById('selectedSaleId').value = '';
         document.getElementById('saleSearchInput').value = '';
         document.getElementById('soldPrice').value = '';
+        document.getElementById('saleQuantity').value = 1;
         document.getElementById('selectedProductPreview').style.display = 'none';
+        updateSaleMath();
     }
+    
+    // --- SALE MATH LIVE UPDATER ---
+    const saleInputs = ['saleQuantity', 'soldPrice', 'saleDiscount', 'saleDiscountType', 'saleShipping', 'saleDeliveryCost', 'salePaymentStatus', 'saleAmountPaid'];
+    saleInputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', updateSaleMath);
+        document.getElementById(id).addEventListener('change', updateSaleMath);
+    });
+
+    function updateSaleMath() {
+        const qty = parseInt(document.getElementById('saleQuantity').value) || 0;
+        const price = parseFloat(document.getElementById('soldPrice').value) || 0;
+        const discountInput = parseFloat(document.getElementById('saleDiscount').value) || 0;
+        const discountType = document.getElementById('saleDiscountType').value;
+        const shipping = parseFloat(document.getElementById('saleShipping').value) || 0;
+        const deliveryCost = parseFloat(document.getElementById('saleDeliveryCost').value) || 0;
+        
+        const subtotal = qty * price;
+        let actualDiscountAmt = 0;
+        
+        if (discountType === 'percent') {
+            actualDiscountAmt = subtotal * (discountInput / 100);
+        } else {
+            actualDiscountAmt = discountInput;
+        }
+        
+        const finalAmount = subtotal - actualDiscountAmt + shipping;
+        currentLiveFinalAmount = finalAmount;
+        
+        // Update Labels
+        document.getElementById('lblSubtotal').textContent = CURRENCY_FMT.format(subtotal);
+        document.getElementById('lblDiscount').textContent = `-${CURRENCY_FMT.format(actualDiscountAmt)}`;
+        document.getElementById('lblShipping').textContent = CURRENCY_FMT.format(shipping);
+        document.getElementById('lblFinalAmount').textContent = CURRENCY_FMT.format(finalAmount);
+        
+        // Product Cost logic for live profit preview
+        const pId = document.getElementById('selectedSaleId').value;
+        const products = getProducts();
+        const product = products.find(p => p.id === pId);
+        const buyPrice = product ? product.buyPrice : 0;
+        const totalBuyCost = buyPrice * qty;
+        const estProfit = finalAmount - totalBuyCost - deliveryCost;
+
+        document.getElementById('lblProductCost').textContent = CURRENCY_FMT.format(totalBuyCost);
+        document.getElementById('lblDeliveryCost').textContent = CURRENCY_FMT.format(deliveryCost);
+        document.getElementById('lblEstimatedProfit').textContent = CURRENCY_FMT.format(estProfit);
+        document.getElementById('lblEstimatedProfit').style.color = estProfit >= 0 ? 'var(--profit-color)' : 'var(--alert-color)';
+
+        // Payment Logic
+        const status = document.getElementById('salePaymentStatus').value;
+        const partialBox = document.getElementById('partialPaymentBox');
+        const amountPaidInput = document.getElementById('saleAmountPaid');
+        const balanceDueInput = document.getElementById('saleBalanceDue');
+        
+        if(status === 'Paid') {
+            partialBox.style.display = 'none';
+            amountPaidInput.value = finalAmount;
+            balanceDueInput.value = '₹0.00';
+        } else if(status === 'Pending') {
+            partialBox.style.display = 'none';
+            amountPaidInput.value = 0;
+            balanceDueInput.value = CURRENCY_FMT.format(finalAmount);
+        } else if(status === 'Partial') {
+            partialBox.style.display = 'block';
+            const paid = parseFloat(amountPaidInput.value) || 0;
+            const balance = finalAmount - paid;
+            balanceDueInput.value = CURRENCY_FMT.format(balance);
+        }
+    }
+    
+    // --- SALE INITIALIZATION ---
+    function prepareSaleForm() {
+        document.getElementById('saleForm').reset();
+        clearSelectedSaleProduct();
+        
+        // Generate Invoice Num
+        const sales = getSales();
+        let maxInv = 0;
+        sales.forEach(s => {
+            if (s.invoiceNo && s.invoiceNo.startsWith('INV-')) {
+                const num = parseInt(s.invoiceNo.replace('INV-', ''), 10);
+                if (!isNaN(num) && num > maxInv) maxInv = num;
+            }
+        });
+        nextInvoiceNumber = `INV-${String(maxInv + 1).padStart(4, '0')}`;
+        document.getElementById('displayInvoiceNo').textContent = nextInvoiceNumber;
+        
+        // Set Default Date
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('saleDateInput').value = now.toISOString().slice(0,16);
+        
+        updateSaleMath();
+    }
+
+
+    /* --- OPTIMIZED IMAGE PROCESSING PIPELINE --- */
+    async function optimizeImage(file) {
+        return new Promise(async (resolve, reject) => {
+            if (!file) return reject(new Error("No file provided"));
+            if (!file.type.match(/image.*/)) return reject(new Error("File is not an image"));
+
+            try {
+                let imgWidth, imgHeight;
+                let imgElementOrBitmap;
+
+                // Use high performance createImageBitmap if supported, fallback to classical Image
+                if ('createImageBitmap' in window) {
+                    imgElementOrBitmap = await createImageBitmap(file);
+                    imgWidth = imgElementOrBitmap.width;
+                    imgHeight = imgElementOrBitmap.height;
+                } else {
+                    const objectUrl = URL.createObjectURL(file);
+                    await new Promise((res, rej) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            imgElementOrBitmap = img;
+                            imgWidth = img.width;
+                            imgHeight = img.height;
+                            URL.revokeObjectURL(objectUrl);
+                            res();
+                        };
+                        img.onerror = () => {
+                            URL.revokeObjectURL(objectUrl);
+                            rej(new Error("Failed to load image for optimization"));
+                        };
+                        img.src = objectUrl;
+                    });
+                }
+
+                let width = imgWidth;
+                let height = imgHeight;
+                const maxDim = 1200;
+
+                // Calculate new dimensions while maintaining aspect ratio (only scale down)
+                if (width > maxDim || height > maxDim) {
+                    if (width > height) {
+                        height = Math.round((height * maxDim) / width);
+                        width = maxDim;
+                    } else {
+                        width = Math.round((width * maxDim) / height);
+                        height = maxDim;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+
+                // Fill with white background to handle transparent PNGs converting to JPEG
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, width, height);
+
+                // Draw the resized image
+                ctx.drawImage(imgElementOrBitmap, 0, 0, width, height);
+
+                // Release memory if it's a bitmap
+                if (imgElementOrBitmap.close) {
+                    imgElementOrBitmap.close();
+                }
+
+                // Convert to compressed JPEG blob
+                canvas.toBlob((blob) => {
+                    if (!blob) return reject(new Error("Image optimization failed"));
+                    
+                    // Create a new File object matching the original's name but with .jpg extension
+                    const newFileName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+                    const optimizedFile = new File([blob], newFileName, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    });
+                    
+                    resolve(optimizedFile);
+                }, 'image/jpeg', 0.78);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    // --- NEW: Trigger optimization immediately on file selection ---
+    document.getElementById('imageUploadInput').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const statusText = document.getElementById('uploadStatusText');
+        const preview = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const removeBtn = document.getElementById('removeImgBtn');
+        const submitBtn = document.getElementById('submitButton');
+
+        try {
+            submitBtn.disabled = true;
+            statusText.textContent = '⏳ Optimizing image...';
+
+            // Clean up previous preview memory
+            if (imagePreviewUrl) {
+                URL.revokeObjectURL(imagePreviewUrl);
+                imagePreviewUrl = null;
+            }
+
+            // Execute optimization
+            optimizedImageFile = await optimizeImage(file);
+
+            // Create new preview from optimized blob
+            imagePreviewUrl = URL.createObjectURL(optimizedImageFile);
+            preview.src = imagePreviewUrl;
+            previewContainer.style.display = 'block';
+            removeBtn.style.display = 'inline-block';
+
+            statusText.textContent = '✓ Image optimized (Ready to save)';
+        } catch (err) {
+            alert('Image optimization failed: ' + err.message);
+            statusText.textContent = 'Optimization failed!';
+            removeSelectedImage(); // Reset input state safely
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
 
     /* --- IMGBB UPLOAD LOGIC --- */
     async function uploadToImgBB(file) {
         const formData = new FormData();
         formData.append('image', file);
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-            method: 'POST',
-            body: formData
-        });
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
         const data = await res.json();
-        if (data && data.success) {
-            return data.data.url;
-        } else {
-            throw new Error(data.error ? data.error.message : 'Image upload failed');
-        }
+        if (data && data.success) return data.data.url;
+        else throw new Error(data.error ? data.error.message : 'Image upload failed');
     }
 
     function removeSelectedImage() {
@@ -846,6 +1275,13 @@
         document.getElementById('imagePreviewContainer').style.display = 'none';
         document.getElementById('removeImgBtn').style.display = 'none';
         document.getElementById('uploadStatusText').textContent = '';
+
+        // Safely clear memory state
+        optimizedImageFile = null;
+        if (imagePreviewUrl) {
+            URL.revokeObjectURL(imagePreviewUrl);
+            imagePreviewUrl = null;
+        }
     }
 
     // --- PRODUCT FORM SUBMIT ---
@@ -853,35 +1289,66 @@
         e.preventDefault();
         const submitBtn = document.getElementById('submitButton');
         const statusText = document.getElementById('uploadStatusText');
-        const fileInput = document.getElementById('imageUploadInput');
         
         let imageUrl = document.getElementById('productImage').value || '';
 
-        // If new file chosen, upload to ImgBB
-        if (fileInput.files && fileInput.files[0]) {
+        // If there is an optimized file waiting, upload it directly
+        if (optimizedImageFile) {
             try {
                 submitBtn.disabled = true;
-                submitBtn.textContent = '⏳ Uploading Image...';
-                statusText.textContent = 'Uploading image to ImgBB...';
-                imageUrl = await uploadToImgBB(fileInput.files[0]);
-                statusText.textContent = '';
+                submitBtn.textContent = '⏳ Uploading...';
+                statusText.textContent = '⏳ Uploading optimized image...';
+                
+                imageUrl = await uploadToImgBB(optimizedImageFile);
+                
+                statusText.textContent = '✓ Image uploaded successfully';
             } catch (err) {
                 alert('Upload error: ' + err.message);
                 submitBtn.disabled = false;
                 submitBtn.textContent = '📦 Save to Inventory';
                 statusText.textContent = 'Upload failed!';
-                return;
+                return; // Stop the form submission on failure
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = '📦 Save to Inventory';
+                if(submitBtn.textContent !== '📦 Save to Inventory') {
+                    submitBtn.textContent = '📦 Save to Inventory';
+                }
             }
         }
 
         const products = getProducts();
         const id = document.getElementById('productId').value || Date.now().toString();
         const existing = products.find(x => x.id === id);
+        const isEditing = !!existing;
+        
         const buy = parseFloat(document.getElementById('originalPrice').value) || 0;
         const sell = parseFloat(document.getElementById('resalePrice').value) || 0;
+        
+        let newQty = 0;
+        let historyEntry = null;
+
+        // Process stock management logically
+        if (isEditing) {
+            newQty = existing.currentQuantity;
+            const action = document.getElementById('stockAction').value;
+            const adjQty = parseInt(document.getElementById('adjustQuantity').value) || 0;
+
+            if (action === 'add' && adjQty > 0) {
+                historyEntry = { date: Date.now(), action: 'Stock Added', change: `+${adjQty}`, before: existing.currentQuantity, after: existing.currentQuantity + adjQty };
+                newQty += adjQty;
+            } else if (action === 'remove' && adjQty > 0) {
+                if (newQty - adjQty < 0) {
+                    alert(`Cannot remove ${adjQty} pcs. Only ${newQty} available.`);
+                    return; // Prevent saving if math is wrong
+                }
+                historyEntry = { date: Date.now(), action: 'Stock Adjusted', change: `-${adjQty}`, before: existing.currentQuantity, after: existing.currentQuantity - adjQty };
+                newQty -= adjQty;
+            }
+        } else {
+            // New Product Registration
+            newQty = parseInt(document.getElementById('stockQuantity').value) || 0;
+            historyEntry = { date: Date.now(), action: 'Initial Stock', change: `+${newQty}`, before: 0, after: newQty };
+        }
 
         const p = {
             id,
@@ -894,48 +1361,139 @@
             date: document.getElementById('stockCheckDate').value,
             details: document.getElementById('productDetails').value,
             color: document.getElementById('productColor').value,
-            available: document.getElementById('productAvailability').value === 'true',
+            currentQuantity: newQty,
+            initialQuantity: isEditing ? existing.initialQuantity : newQty, // Keep initial static
+            available: newQty > 0, // Auto calculated status
             profit: sell - buy,
             profitPercent: buy > 0 ? ((sell - buy) / buy * 100).toFixed(1) : 0,
             timestamp: existing ? existing.timestamp : Date.now(),
-            lastUpdated: Date.now()
+            lastUpdated: Date.now(),
+            stockHistory: existing ? (existing.stockHistory || []) : []
         };
+        
+        // Push history record to front of array if a change occurred
+        if (historyEntry) p.stockHistory.unshift(historyEntry);
 
         const idx = products.findIndex(x => x.id === id);
         if(idx > -1) products[idx] = p; else products.push(p);
         saveProducts(products);
         
-        e.target.reset();
-        removeSelectedImage();
-        document.getElementById('productId').value = '';
-        document.getElementById('formTitle').innerText = "Product Details";
+        prepareAddForm(); // Reset and redirect back properly
         showSection('listSection');
     });
 
-    // --- SALES FORM SUBMIT ---
+    // --- ENHANCED SALES FORM SUBMIT ---
     document.getElementById('saleForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const sales = getSales();
         const products = getProducts();
-        const pId = document.getElementById('selectedSaleId').value;
-        const product = products.find(p => p.id === pId);
-        if(!product) return alert("Please select a product from search results.");
         
-        const soldPrice = parseFloat(document.getElementById('soldPrice').value);
+        const pId = document.getElementById('selectedSaleId').value;
+        const productIndex = products.findIndex(p => p.id === pId);
+        if(productIndex === -1) return alert("Please select a product from search results.");
+        const product = products[productIndex];
+        
+        const qtySold = parseInt(document.getElementById('saleQuantity').value);
+        if(qtySold < 1) return alert("Quantity must be at least 1.");
+        if(qtySold > product.currentQuantity) return alert(`Only ${product.currentQuantity} pcs available. You cannot sell ${qtySold} pcs.`);
+        if(product.currentQuantity <= 0) return alert("❌ Out of Stock! Cannot record sale.");
+        
+        const soldPricePerPiece = parseFloat(document.getElementById('soldPrice').value);
+        if(soldPricePerPiece < 0) return alert("Sold price cannot be negative.");
+
+        const discountInput = parseFloat(document.getElementById('saleDiscount').value) || 0;
+        if(discountInput < 0) return alert("Discount cannot be negative.");
+        const discountType = document.getElementById('saleDiscountType').value;
+        if(discountType === 'percent' && discountInput > 100) return alert("Percentage discount cannot exceed 100%.");
+
+        const shippingCharge = parseFloat(document.getElementById('saleShipping').value) || 0;
+        if(shippingCharge < 0) return alert("Shipping charge cannot be negative.");
+
+        const deliveryCost = parseFloat(document.getElementById('saleDeliveryCost').value) || 0;
+        if(deliveryCost < 0) return alert("Delivery cost cannot be negative.");
+        
+        if(currentLiveFinalAmount < 0) return alert("Final amount cannot be negative. Check your discount.");
+
+        const paymentStatus = document.getElementById('salePaymentStatus').value;
+        let amountPaid = 0;
+        
+        if(paymentStatus === 'Paid') amountPaid = currentLiveFinalAmount;
+        else if(paymentStatus === 'Pending') amountPaid = 0;
+        else if(paymentStatus === 'Partial') {
+            amountPaid = parseFloat(document.getElementById('saleAmountPaid').value) || 0;
+            if(amountPaid <= 0 || amountPaid >= currentLiveFinalAmount) {
+                return alert("Partial payment amount must be greater than 0 and less than Final Amount.");
+            }
+        }
+        
+        const balanceDue = currentLiveFinalAmount - amountPaid;
+
+        // Create Sale History Entry for Product Inventory
+        const beforeStock = product.currentQuantity;
+        product.currentQuantity -= qtySold;
+        product.available = product.currentQuantity > 0;
+        product.lastUpdated = Date.now();
+        
+        const historyEntry = { 
+            date: Date.now(), action: 'Sale', change: `-${qtySold}`, before: beforeStock, after: product.currentQuantity 
+        };
+        if(!product.stockHistory) product.stockHistory = [];
+        product.stockHistory.unshift(historyEntry);
+        products[productIndex] = product;
+        
+        // Save inventory changes immediately
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
+        // Subtotal & Profit Math
+        const subtotal = qtySold * soldPricePerPiece;
+        const discountAmount = discountType === 'percent' ? (subtotal * (discountInput/100)) : discountInput;
+        const totalBuyCost = product.buyPrice * qtySold;
+        const totalProfit = currentLiveFinalAmount - totalBuyCost - deliveryCost;
+        
+        const saleDateInput = document.getElementById('saleDateInput').value;
+        const saleTimestamp = saleDateInput ? new Date(saleDateInput).getTime() : Date.now();
+
+        // Push new extensive sale object
         sales.push({
             id: Date.now(),
+            invoiceNo: nextInvoiceNumber,
             productName: product.name,
+            productId: product.id,
             categoryColor: product.color,
             buyPrice: product.buyPrice,
-            soldPrice: soldPrice,
-            profit: soldPrice - product.buyPrice,
-            date: Date.now()
+            soldPrice: soldPricePerPiece,
+            qty: qtySold,
+            
+            subtotal: subtotal,
+            discount: discountAmount,
+            discountType: discountType,
+            shippingCharge: shippingCharge,
+            deliveryCost: deliveryCost,
+            finalAmount: currentLiveFinalAmount,
+            
+            amountPaid: amountPaid,
+            balanceDue: balanceDue,
+            
+            paymentMethod: document.getElementById('salePaymentMethod').value,
+            paymentStatus: paymentStatus,
+            
+            customerName: document.getElementById('saleCustomerName').value.trim(),
+            customerPhone: document.getElementById('saleCustomerPhone').value.trim(),
+            notes: document.getElementById('saleNotes').value.trim(),
+            
+            saleDate: saleTimestamp,
+            date: Date.now(),
+            profit: totalProfit
         });
+        
         localStorage.setItem(SALES_KEY, JSON.stringify(sales));
-        e.target.reset();
-        clearSelectedSaleProduct();
+        
+        prepareSaleForm();
+        renderProducts(); 
         renderSales();
         updateDashboard();
+        
+        alert(`Sale confirmed! Invoice ${nextInvoiceNumber} generated.`);
     });
 
     function renderProducts() {
@@ -948,7 +1506,10 @@
         list.innerHTML = '';
         let filtered = products.filter(p => {
             const matchesSearch = p.name.toLowerCase().includes(term) || (p.number && p.number.toLowerCase().includes(term));
-            let matchesFilter = filter === 'all' || p.available.toString() === filter || p.color === filter;
+            let matchesFilter = true;
+            if(filter === 'true') matchesFilter = p.currentQuantity > 0;
+            else if(filter === 'false') matchesFilter = p.currentQuantity === 0;
+            else if(filter !== 'all') matchesFilter = p.color === filter;
             return matchesSearch && matchesFilter;
         });
 
@@ -962,33 +1523,66 @@
         });
 
         filtered.forEach((p, i) => {
+            // Generate History Table Html
+            let historyHtml = '';
+            if(p.stockHistory && p.stockHistory.length > 0) {
+                historyHtml = `
+                    <div class="detail-label" style="margin-top: 15px;">Stock History:</div>
+                    <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 5px; font-size: 0.82em; max-height: 140px; overflow-y: auto; margin-top: 5px;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--secondary-text);">
+                                <th style="padding: 4px;">Date</th>
+                                <th style="padding: 4px;">Action</th>
+                                <th style="padding: 4px;">Qty</th>
+                                <th style="padding: 4px;">Result</th>
+                            </tr>`;
+                p.stockHistory.forEach(h => {
+                    const hDate = new Date(h.date).toLocaleString([], {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
+                    const changeColor = h.change.startsWith('+') ? 'var(--profit-color)' : (h.change.startsWith('-') ? 'var(--alert-color)' : 'var(--text-color)');
+                    historyHtml += `
+                        <tr style="border-bottom: 1px dashed var(--border-color);">
+                            <td style="padding: 6px 4px; white-space: nowrap; color: var(--secondary-text);">${hDate}</td>
+                            <td style="padding: 6px 4px;">${h.action}</td>
+                            <td style="padding: 6px 4px; color: ${changeColor}; font-weight: bold;">${h.change}</td>
+                            <td style="padding: 6px 4px; color: var(--secondary-text);">${h.before} → ${h.after}</td>
+                        </tr>`;
+                });
+                historyHtml += `</table></div>`;
+            } else {
+                historyHtml = `<div class="detail-label" style="margin-top: 15px;">Stock History: <span style="font-weight:normal; color:var(--secondary-text)">No records available</span></div>`;
+            }
+
             const li = document.createElement('li');
             li.className = 'product-item';
             li.id = `item-${p.id}`;
             li.innerHTML = `
                 <div class="product-header" onclick="document.getElementById('item-${p.id}').classList.toggle('expanded')">
                     <div class="checkbox-container"><input type="checkbox" class="item-checkbox" value="${p.id}" onclick="event.stopPropagation()"></div>
-                    ${p.image ? `<img src="${p.image}" class="product-thumb-img" alt="${escapeHtml(p.name)}">` : ''}
+                    ${p.image ? `<img src="${p.image}" loading="lazy" class="product-thumb-img" alt="${escapeHtml(p.name)}">` : ''}
                     <div class="header-info">
                         <div class="header-top-row">
                             <div class="header-name"><span class="color-dot" style="background-color:${p.color}"></span><span class="name-text">#${i+1} ${escapeHtml(p.name)}</span></div>
                             <span class="header-price">${CURRENCY_FMT.format(p.resalePrice)}</span>
                         </div>
                         <div class="header-bottom-row">
-                            <span class="status-badge ${p.available ? 'status-in-stock' : 'status-out-of-stock'}">${p.available ? 'IN' : 'OUT'}</span>
+                            <span class="status-badge ${p.currentQuantity > 0 ? 'status-in-stock' : 'status-out-of-stock'}">${p.currentQuantity > 0 ? p.currentQuantity + ' IN' : 'OUT'}</span>
                             <span style="color:${p.profit >= 0 ? 'var(--profit-color)' : 'var(--alert-color)'}">+${CURRENCY_FMT.format(p.profit)} (${p.profitPercent}%)</span>
                         </div>
                     </div>
                 </div>
                 <div class="product-body">
-                    ${p.image ? `<div style="text-align:center; margin-bottom:15px;"><a href="${p.image}" target="_blank"><img src="${p.image}" style="max-width:100%; max-height:220px; border-radius:8px; border:1px solid var(--border-color); object-fit:contain;"></a></div>` : ''}
+                    ${p.image ? `<div style="text-align:center; margin-bottom:15px;"><a href="${p.image}" target="_blank"><img src="${p.image}" loading="lazy" style="max-width:100%; max-height:220px; border-radius:8px; border:1px solid var(--border-color); object-fit:contain;"></a></div>` : ''}
+                    <div class="detail-row"><span class="detail-label">Current Stock:</span> <span class="detail-value" style="font-weight:bold; color:${p.currentQuantity > 0 ? 'var(--profit-color)' : 'var(--alert-color)'}">${p.currentQuantity} pcs</span></div>
                     <div class="detail-row"><span class="detail-label">SKU:</span> <span class="detail-value">${escapeHtml(p.number || '-')}</span></div>
                     <div class="detail-row"><span class="detail-label">Link:</span> <span class="detail-value">${p.url ? `<a href="${p.url}" target="_blank" class="link-style">Open Link 🔗</a>` : '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label">Buy Price:</span> <span class="detail-value">${CURRENCY_FMT.format(p.buyPrice)}</span></div>
+                    <div class="detail-row"><span class="detail-label">Buy Price:</span> <span class="detail-value">${CURRENCY_FMT.format(p.buyPrice)}/pc</span></div>
                     <div class="detail-row"><span class="detail-label">Checked Date:</span> <span class="detail-value">${p.date || '-'}</span></div>
                     <div style="font-size:0.85em; color:var(--secondary-text); margin-bottom:12px;"><b>Updated:</b> <span id="timeago-${p.id}">${timeAgo(p.lastUpdated)}</span></div>
                     <div class="detail-label">Notes:</div>
                     <div style="margin-top:4px; white-space: pre-wrap; color:var(--secondary-text); font-size:0.9em;">${escapeHtml(p.details || 'No notes.')}</div>
+                    
+                    ${historyHtml}
+
                     <div class="actions">
                         <button class="action-btn edit-btn" onclick="editProduct('${p.id}')">Edit</button>
                         <button class="action-btn delete-btn" onclick="deleteProduct('${p.id}')">Delete</button>
@@ -1003,12 +1597,78 @@
         const sales = getSales();
         const list = document.getElementById('salesList');
         list.innerHTML = '';
+        
         sales.slice().reverse().forEach(s => {
             const li = document.createElement('li');
-            li.style = "background:var(--card-bg); border:1px solid var(--border-color); padding:12px; border-radius:8px; margin-bottom:10px; font-size:0.9em;";
-            const color = s.profit >= 0 ? 'var(--profit-color)' : 'var(--alert-color)';
-            const label = s.profit >= 0 ? 'Profit' : 'Loss';
-            li.innerHTML = `<b>${s.productName}</b><br><small>${new Date(s.id).toLocaleString()}</small><br>Sold: ${CURRENCY_FMT.format(s.soldPrice)} | ${label}: <span style="color:${color}; font-weight:800">${CURRENCY_FMT.format(s.profit)}</span>`;
+            li.className = 'product-item'; 
+            li.id = `sale-${s.id}`;
+            
+            const profitColor = s.profit >= 0 ? 'var(--profit-color)' : 'var(--alert-color)';
+            let statusClass = 'status-paid';
+            if(s.paymentStatus === 'Pending') statusClass = 'status-pending';
+            if(s.paymentStatus === 'Partial') statusClass = 'status-partial';
+            
+            const saleDateFormatted = new Date(s.saleDate).toLocaleString([], {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
+            
+            // Build Customer string conditionally
+            let customerHtml = '';
+            if(s.customerName || s.customerPhone) {
+                customerHtml = `
+                    <div class="detail-row"><span class="detail-label">Customer:</span> <span class="detail-value">${escapeHtml(s.customerName || '-')}</span></div>
+                    <div class="detail-row"><span class="detail-label">Phone:</span> <span class="detail-value">${escapeHtml(s.customerPhone || '-')}</span></div>
+                    <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 10px 0;">`;
+            }
+
+            // Build Payment breakdown conditionally
+            let paymentDetailsHtml = '';
+            if (s.paymentStatus === 'Pending') {
+                paymentDetailsHtml = `
+                    <div class="detail-row"><span class="detail-label">Paid:</span> <span class="detail-value">₹0.00</span></div>
+                    <div class="detail-row"><span class="detail-label">Balance Due:</span> <span class="detail-value" style="color:var(--alert-color); font-weight:bold;">${CURRENCY_FMT.format(s.balanceDue)}</span></div>`;
+            } else if (s.paymentStatus === 'Partial') {
+                paymentDetailsHtml = `
+                    <div class="detail-row"><span class="detail-label">Paid:</span> <span class="detail-value">${CURRENCY_FMT.format(s.amountPaid)}</span></div>
+                    <div class="detail-row"><span class="detail-label">Balance Due:</span> <span class="detail-value" style="color:var(--pending-color); font-weight:bold;">${CURRENCY_FMT.format(s.balanceDue)}</span></div>`;
+            }
+
+            li.innerHTML = `
+                <div class="product-header" onclick="document.getElementById('sale-${s.id}').classList.toggle('expanded')">
+                    <div class="header-info">
+                        <div class="header-top-row">
+                            <div class="header-name" style="font-size: 0.95em;"><span class="color-dot" style="background-color:${s.categoryColor}"></span><span class="name-text">${escapeHtml(s.productName)} <span style="color:var(--secondary-text); font-weight:normal;">(x${s.qty})</span></span></div>
+                            <span class="header-price">${CURRENCY_FMT.format(s.finalAmount)}</span>
+                        </div>
+                        <div class="header-bottom-row" style="margin-top: 4px;">
+                            <span style="font-size: 0.85em;">${s.invoiceNo} &nbsp;•&nbsp; ${saleDateFormatted}</span>
+                        </div>
+                        <div class="header-bottom-row" style="margin-top: 6px;">
+                            <span class="status-badge ${statusClass}">${s.paymentStatus.toUpperCase()}</span>
+                            <span style="color:${profitColor}; font-weight:bold;">+${CURRENCY_FMT.format(s.profit)} Profit</span>
+                        </div>
+                        <div style="font-size: 0.7em; text-align: center; color: var(--secondary-text); margin-top: 8px;">Tap to view details ▾</div>
+                    </div>
+                </div>
+                <div class="product-body" style="padding-top: 10px;">
+                    <div class="detail-row"><span class="detail-label">Buy Price:</span> <span class="detail-value">${CURRENCY_FMT.format(s.buyPrice)}/pc</span></div>
+                    <div class="detail-row"><span class="detail-label">Sold Price:</span> <span class="detail-value">${CURRENCY_FMT.format(s.soldPrice)}/pc</span></div>
+                    <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 10px 0;">
+                    
+                    <div class="detail-row"><span class="detail-label">Subtotal:</span> <span class="detail-value">${CURRENCY_FMT.format(s.subtotal)}</span></div>
+                    <div class="detail-row"><span class="detail-label">Discount:</span> <span class="detail-value" style="color:var(--alert-color);">${s.discount > 0 ? '-' : ''}${CURRENCY_FMT.format(s.discount)}</span></div>
+                    <div class="detail-row"><span class="detail-label">Shipping Charged:</span> <span class="detail-value">${CURRENCY_FMT.format(s.shippingCharge)}</span></div>
+                    <div class="detail-row"><span class="detail-label">Delivery Cost:</span> <span class="detail-value">${CURRENCY_FMT.format(s.deliveryCost)}</span></div>
+                    <div class="detail-row"><span class="detail-label">Final Amount:</span> <span class="detail-value" style="font-weight:bold; color:var(--primary-color);">${CURRENCY_FMT.format(s.finalAmount)}</span></div>
+                    <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 10px 0;">
+                    
+                    ${customerHtml}
+                    
+                    <div class="detail-row"><span class="detail-label">Payment Method:</span> <span class="detail-value">${s.paymentMethod}</span></div>
+                    ${paymentDetailsHtml}
+                    <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 10px 0;">
+                    
+                    <div class="detail-label">Notes:</div>
+                    <div style="margin-top:4px; white-space: pre-wrap; color:var(--secondary-text); font-size:0.9em;">${escapeHtml(s.notes || 'No notes.')}</div>
+                </div>`;
             list.appendChild(li);
         });
     }
@@ -1017,21 +1677,27 @@
         const p = getProducts();
         const s = getSales();
         const mode = document.getElementById('graphMode').value;
-        const inStock = p.filter(x => x.available).length;
         
-        document.getElementById('dashInvest').textContent = CURRENCY_FMT.format(p.reduce((sum, item) => sum + item.buyPrice, 0));
-        document.getElementById('dashSalesTotal').textContent = CURRENCY_FMT.format(s.reduce((sum, item) => sum + item.soldPrice, 0));
+        const inStockUnits = p.reduce((sum, item) => sum + item.currentQuantity, 0);
+        const outOfStockSkus = p.filter(x => x.currentQuantity === 0).length;
+        // Investment only counts physically currently held inventory
+        const totalInvestment = p.reduce((sum, item) => sum + (item.buyPrice * item.currentQuantity), 0);
+        
+        // Revenue is based on finalAmount
+        document.getElementById('dashInvest').textContent = CURRENCY_FMT.format(totalInvestment);
+        document.getElementById('dashSalesTotal').textContent = CURRENCY_FMT.format(s.reduce((sum, item) => sum + item.finalAmount, 0));
         document.getElementById('dashRealProfit').textContent = CURRENCY_FMT.format(s.reduce((sum, item) => sum + item.profit, 0));
         document.getElementById('dashRealProfit').style.color = (s.reduce((a,b)=>a+b.profit,0)) >= 0 ? 'var(--profit-color)' : 'var(--alert-color)';
-        document.getElementById('dashInStock').textContent = inStock;
-        document.getElementById('dashOutStock').textContent = p.length - inStock;
+        document.getElementById('dashInStock').textContent = inStockUnits;
+        document.getElementById('dashOutStock').textContent = outOfStockSkus;
 
         const statsList = document.getElementById('categoryStatsList');
         statsList.innerHTML = '';
         Object.entries(CAT_INFO).forEach(([color, info]) => {
             const items = p.filter(x => x.color === color);
-            const inS = items.filter(x => x.available).length;
-            if(items.length > 0) statsList.innerHTML += `<div class="category-stat-row"><div>${info.name}</div><div><span style="color:var(--profit-color)">${inS} In</span> / <span style="color:var(--alert-color)">${items.length - inS} Out</span> (${items.length} Total)</div></div>`;
+            const inS = items.reduce((sum, x) => sum + x.currentQuantity, 0);
+            const outS = items.filter(x => x.currentQuantity === 0).length;
+            if(items.length > 0) statsList.innerHTML += `<div class="category-stat-row"><div>${info.name}</div><div><span style="color:var(--profit-color)">${inS} pcs In</span> / <span style="color:var(--alert-color)">${outS} SKUs Out</span></div></div>`;
         });
         renderChart(s, mode);
     }
@@ -1041,14 +1707,21 @@
         if (myChart) myChart.destroy();
         const now = Date.now();
         const ranges = { '1d': 86400000, '1w': 604800000, '1m': 2592000000, '3m': 7776000000, '6m': 15552000000, '1y': 31536000000, 'all': Infinity };
-        const filtered = sales.filter(s => (now - s.id) <= ranges[chartFilter]);
+        
+        const filtered = sales.filter(s => {
+            const sTime = s.saleDate || s.date || s.id;
+            return (now - sTime) <= ranges[chartFilter];
+        });
+        
         const datasets = [];
         Object.entries(CAT_INFO).forEach(([color, info]) => {
             const catSales = filtered.filter(s => s.categoryColor === color);
             if(catSales.length === 0) return;
             const grouped = catSales.reduce((acc, s) => {
-                const day = new Date(s.id).toLocaleDateString();
-                acc[day] = (acc[day] || 0) + (mode === 'sales' ? s.soldPrice : s.profit);
+                const sTime = s.saleDate || s.date || s.id;
+                const day = new Date(sTime).toLocaleDateString();
+                const amt = mode === 'sales' ? s.finalAmount : s.profit;
+                acc[day] = (acc[day] || 0) + amt;
                 return acc;
             }, {});
             datasets.push({ label: info.name, data: Object.entries(grouped).map(([day, val]) => ({ x: day, y: val })), borderColor: color, backgroundColor: color, tension: 0.2, borderWidth: 3, pointRadius: 4 });
@@ -1059,7 +1732,27 @@
     function copySalesReport() {
         const sales = getSales(); if(!sales.length) return alert("No sales recorded.");
         let r = "💰 SALES TRANSACTION REPORT\n" + new Date().toLocaleString() + "\n\n";
-        sales.forEach((s, i) => r += `${i+1}. ${s.productName}\n   💵 Sold: ${CURRENCY_FMT.format(s.soldPrice)} | Profit: ${CURRENCY_FMT.format(s.profit)}\n\n`);
+        
+        sales.forEach((s, i) => {
+            const saleDate = new Date(s.saleDate || s.date || s.id).toLocaleDateString();
+            r += `${i+1}. ${s.productName}\n`;
+            r += `   Invoice: ${s.invoiceNo}\n`;
+            r += `   Date: ${saleDate}\n`;
+            r += `   Qty: ${s.qty}\n`;
+            r += `   Sold Price: ${CURRENCY_FMT.format(s.soldPrice)}/pc\n`;
+            r += `   Subtotal: ${CURRENCY_FMT.format(s.subtotal)}\n`;
+            r += `   Discount: ${CURRENCY_FMT.format(s.discount)}\n`;
+            r += `   Shipping Charged: ${CURRENCY_FMT.format(s.shippingCharge)}\n`;
+            r += `   Delivery Cost: ${CURRENCY_FMT.format(s.deliveryCost)}\n`;
+            r += `   Final Amount: ${CURRENCY_FMT.format(s.finalAmount)}\n`;
+            r += `   Paid: ${CURRENCY_FMT.format(s.amountPaid)}\n`;
+            r += `   Balance: ${CURRENCY_FMT.format(s.balanceDue)}\n`;
+            r += `   Payment: ${s.paymentMethod}\n`;
+            r += `   Status: ${s.paymentStatus.toUpperCase()}\n`;
+            r += `   Profit: ${CURRENCY_FMT.format(s.profit)}\n`;
+            if(s.customerName) r += `   Customer: ${s.customerName}\n`;
+            r += `\n`;
+        });
         navigator.clipboard.writeText(r).then(() => alert('Full report copied!'));
     }
 
@@ -1074,6 +1767,7 @@
 
     function editProduct(id) {
         const p = getProducts().find(x => x.id === id);
+        
         document.getElementById('productId').value = p.id;
         document.getElementById('productName').value = p.name;
         document.getElementById('productImage').value = p.image || '';
@@ -1084,8 +1778,25 @@
         document.getElementById('stockCheckDate').value = p.date;
         document.getElementById('productDetails').value = p.details;
         document.getElementById('productColor').value = p.color;
-        document.getElementById('productAvailability').value = p.available.toString();
         
+        // Hide the basic initial stock field & toggle requirement
+        document.getElementById('newStockDiv').style.display = 'none';
+        document.getElementById('stockQuantity').required = false;
+
+        // Show detailed editor stock field
+        document.getElementById('editStockDiv').style.display = 'block';
+        document.getElementById('displayCurrentStock').textContent = p.currentQuantity;
+        document.getElementById('stockAction').value = 'none';
+        document.getElementById('adjustQuantity').value = '';
+        document.getElementById('stockPreview').textContent = '';
+        
+        // Reset any pending local optimization state
+        optimizedImageFile = null;
+        if (imagePreviewUrl) {
+            URL.revokeObjectURL(imagePreviewUrl);
+            imagePreviewUrl = null;
+        }
+
         const preview = document.getElementById('imagePreview');
         const previewContainer = document.getElementById('imagePreviewContainer');
         const removeBtn = document.getElementById('removeImgBtn');
@@ -1111,7 +1822,7 @@
     function copySelectedData() {
         const checked = Array.from(document.querySelectorAll('.item-checkbox:checked')).map(c => c.value);
         if(!checked.length) return alert('Select items');
-        const text = getProducts().filter(p => checked.includes(p.id)).map(p => `${p.name}: Buy ${CURRENCY_FMT.format(p.buyPrice)} | Sell ${CURRENCY_FMT.format(p.resalePrice)}`).join('\n');
+        const text = getProducts().filter(p => checked.includes(p.id)).map(p => `${p.name} (x${p.currentQuantity}): Buy ${CURRENCY_FMT.format(p.buyPrice)} | Sell ${CURRENCY_FMT.format(p.resalePrice)}`).join('\n');
         navigator.clipboard.writeText(text).then(() => alert('Copied!'));
     }
     function escapeHtml(t) { return t ? t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''; }
